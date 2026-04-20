@@ -1,0 +1,61 @@
+services:
+  fastapi:
+    build: ./lucky_websocket
+    ports:
+      - "8001:8001"
+    networks:
+      - appnet
+
+  django:
+    build:
+      context: ./lucky_api
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./lucky_api/.env
+    depends_on:
+      - db-primary
+    networks:
+      - appnet
+
+  db-primary:
+    image: postgres:16  
+    environment:
+      POSTGRES_DB: luckyseven
+      POSTGRES_USER: backend_user
+      POSTGRES_PASSWORD: yamagod123a@
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=trust"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-primary.sh:/docker-entrypoint-initdb.d/init-primary.sh
+    command: >
+      postgres
+      -c wal_level=replica
+      -c hot_standby=on
+      -c max_wal_senders=10
+      -c max_replication_slots=10
+      -c hot_standby_feedback=on
+    networks:
+      - appnet 
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - fastapi
+      - django
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge
+
+volumes:
+  postgres_data:
