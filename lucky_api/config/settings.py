@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "apps.accounts",
+    "apps.games",
 ]
 
 MIDDLEWARE = [
@@ -245,3 +246,6 @@ SIWE_URI = config("SIWE_URI", default="http://localhost")
 SIWE_STATEMENT = config("SIWE_STATEMENT", default="Sign in to Lucky 7")
 SIWE_CHAIN_ID = config("SIWE_CHAIN_ID", default=1, cast=int)
 SIWE_TTL_SECONDS = config("SIWE_TTL_SECONDS", default=300, cast=int)
+
+
+DJANGO_API_SECRET = config("DJANGO_API_SECRET")

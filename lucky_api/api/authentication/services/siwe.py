@@ -151,8 +151,8 @@ def verify_signature_and_issue_tokens(
     rec.save(update_fields=["used_at"])
 
     user, created = CustomUser.objects.get_or_create(
-        wallet_address=address,
-        defaults={"username": address},
+        wallet_address=address.lower(),
+        defaults={"username": address.lower()},
     )
     if created or not user.has_usable_password():
         user.set_unusable_password()

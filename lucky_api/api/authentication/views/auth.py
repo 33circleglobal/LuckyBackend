@@ -30,8 +30,8 @@ logger = logging.getLogger(__name__)
 
 
 class RequestNonceView(APIView):
-    throttle_classes = [AnonRateThrottle, ScopedRateThrottle]
-    throttle_scope = "custom"
+    # throttle_classes = [AnonRateThrottle, ScopedRateThrottle]
+    # throttle_scope = "custom"
 
     def post(self, request):
         try:
@@ -59,8 +59,8 @@ class RequestNonceView(APIView):
 
 
 class VerifySignatureView(APIView):
-    throttle_classes = [AnonRateThrottle, ScopedRateThrottle]
-    throttle_scope = "custom"
+    # throttle_classes = [AnonRateThrottle, ScopedRateThrottle]
+    # throttle_scope = "custom"
 
     def post(self, request):
         try:
